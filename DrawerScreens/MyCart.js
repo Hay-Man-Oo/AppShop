@@ -8,13 +8,9 @@ import { Ionicons } from "@expo/vector-icons";
 
 const MyCart = ({ route, navigation }) => {
 
-    const [data, setData] = useState([]);
-    const dataRef = firebase.firestore().collection('orders')
-    
-    const [name, setName] = useState('');
-    const [price, setPrice] = useState('');
-    const [phone, setPhone] = useState('');
-    const [address, setAddress] = useState('');
+    //const [data, setData] = useState([]);
+    const dataRef = firebase.firestore().collection('products')
+
     const [total, setTotal] = useState('');
     const firestore = firebase.firestore;
     const auth = firebase.auth;
@@ -29,37 +25,41 @@ const MyCart = ({ route, navigation }) => {
                 setUser(user.data())
             })
     }, [])
+    const uid = user?.id;
+    console.log(uid);
 
-    const add = () => {
-        if (name && name.length > 0 || price && price.length > 0 || total && total.length > 0 || address && address.length > 0 ||  phone && phone.length > 0) {
-            const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+    const order = () => {
+        // if (uid !== null) {
+        const individualCart = {
+          "id": id ,
+          "name": name ,
+          "imgURL": imgURL ,
+          "desc": desc ,
+          "price": price ,
+          "qty": qty ,
+        };
+        // console.log(individualCart);
+        // Product = individualCart;
+        // Product['qty'] = 1;
+        // Product['TotalProductPrice'] = Product.qty * Product.price;
+        firebase
+          .firestore()
+          .collection("orders" + uid)
+          .doc(individualCart.id)
+          .set(individualCart)
+          .then(() => {
+            console.log("Successfully order");
+          });
+        // }
+      };
+    
 
-            const data = {
-                name: user?.id,
-                price: user?.id,
-                phone: user?.phone,
-                address: address,
-                total: parseFloat(total),
-                createdAt: timestamp
-            };
-            dataRef
-                .add(data)
-                .then(() => {
-                    setName('')
-                    setPrice('')
-                    setPhone('')
-                    setAddress('')
-                    setTotal('')
-                })
-                .then(() => {
-                    Alert.alert('Your Order Successfully Arrived')
-                    navigation.navigate('Products')
-                })
-                .catch((error) => {
-                    alert(error)
-                })
-        }
-    }
+      var [id] = useState('');
+      var [name, setName] = useState('');
+      var [imgURL, setImageURL] = useState('');
+      var [desc, setDesc] = useState('');
+      var [price, setPrice] = useState('');
+      var [qty, setQty] = useState('');
 
 
     const [cartList, setCartList] = useState([]);
@@ -70,7 +70,7 @@ const MyCart = ({ route, navigation }) => {
                 if (data !== null) {
                     setCartList(JSON.parse(data)) 
                     console.log(JSON.parse(data))
-                    let sum = 0;
+                    let sum = 10;
                     JSON.parse(data).map((item) => {
                         sum += item.price * item.qty
                     })
@@ -105,11 +105,6 @@ const MyCart = ({ route, navigation }) => {
         }
     }
 
-    const DeleteAllFinishedTasks = async () => {
-        await AsyncStorage.removeItem('carts');
-        console.log("clear")
-    }
-
     const CartItemView = ({ item,index }) => {
         return (
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10 }}>
@@ -130,66 +125,41 @@ const MyCart = ({ route, navigation }) => {
         )
     }
 
-    const [count, setCount] = useState(1);
-
-    const increase = (item) => {
-    setCount(count + 1)
-    } 
-
-    const decrease = (item) => {
-    if (count <= 0) {
-        count === 0;
-        navigation.navigate('ProductDetail', {item})
-    } else {
-        setCount(count - 1);
-    }
-}
-
     return (
   
         <View style={styles.container}>
             <Text style={{fontSize: 20,textAlign: 'center'}}>
                 Order Details
             </Text>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10 }}>
-                <Text>Qty</Text>
-                <Text>Image</Text>
-                <Text>Name</Text>
-                <Text>Price</Text>
-                <Text>Delete</Text>
-            </View>
             <FlatList
                         data={cartList}
                         renderItem={CartItemView}
                         showsVerticalScrollIndicator={true}
                         style={{ flex: 1, marginTop: 16 }}
             />
-             <TouchableOpacity
-                onPress={ DeleteAllFinishedTasks }
-            >
-                <Text style={{ color: 'red' }}>Clear Cart</Text>
-            </TouchableOpacity>
 
-            <View style={{flex: 2,}}>
-                <TextInput
-                    style={styles.inputAddress}
-                    placeholder={ user?.address}
-                    onChangeText={(text) => setAddress(text)}
-                    value={address}
-                />
+            {/*<View style={{flex: 0.5}}>
+                
                 <Text>UserID : { user?.id}</Text>
                 <Text>Name : {user?.username}</Text>
                 <Text>Email : {user?.email}</Text>
                 <Text>Phone : {user?.phone}</Text>
-
-                <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 10}}>
-                    <Text>Total</Text>
-                    <Text>{total}</Text>
-                </View>
+                
+            </View>*/}
+            <View>
+                <Text style={{fontSize: 20,fontWeight:'bold',color: 'gold'}}>Check Out</Text>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 10}}>
+                <Text>Shipping Fee</Text>
+                <Text>$ 10</Text>
+            </View>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 10}}>
+                <Text>Total</Text>
+                <Text>$ {total}</Text>
+            </View>
             </View>
            
             <View style={styles.btn}>
-                    <TouchableOpacity onPress={add}>
+                    <TouchableOpacity onPress={order}>
                         <Text>Order</Text>
                     </TouchableOpacity>
             </View>

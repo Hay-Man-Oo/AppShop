@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  ImageBackground,
 } from "react-native";
 import { firebase } from "../config";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -63,7 +64,10 @@ const All = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      
+      <ImageBackground
+                source={require('../assets/bg5.jpg')}
+                style={{width: '100%', height: "100%",}}
+            > 
       <SearchBar
         placeholder="Search"
         onChangeText={(search) => setSearch(search)}
@@ -124,7 +128,8 @@ const All = ({ navigation }) => {
             />
             </Animatable.View>
         </SafeAreaView>
-      </View>
+        </View>
+        </ImageBackground>
     </View>
   );
 };

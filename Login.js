@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Button, Image, ImageBackground } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Button, Image } from 'react-native';
 import { firebase } from '../config'
 import React, { useState } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -50,37 +50,21 @@ export default function Login({ navigation }) {
 
     }
     return (
-        <View style={styles.container}>
-            <ImageBackground
-                source={require('../assets/bg.jpg')}
-                style={{width: '100%', height: "100%",}}
-            > 
-                <View style={{ flex: 1, marginLeft: 200, }}>
-                
-                <Text style={{ fontSize: 40,   paddingLeft: 40,marginTop: 90, fontWeight: "900", color: "#000" }}>WTTH</Text>
-                <Image
-                    style={{height: 100,
-                            width: 100,
-                        marginLeft: 55,
-                        marginTop: 45,
-                        borderRadius: 50}}
-                    source={require('../assets/logo.png')}
-                />
-                </View>
-               
+        <KeyboardAwareScrollView style={styles.container}>
             <View style={styles.con}>
 
-                    <Text style={{
-                        fontSize: 28, fontWeight: "bold", color: "#fff",   marginBottom: 20,  marginLeft: 10,
-                    }}>LOG IN</Text>
-   
+                <Text style={{ fontSize: 28, fontWeight: "bold" }}>LOG IN</Text>
+                <Image
+                    style={styles.acc}
+                    source={require('../assets/logo.png')}
+                />
                 <TextInput
                     value={email}
                     onChangeText={(text) => setEmail(text)}
                     placeholder='Email Address'
                     style={styles.textBoxes}
                     keyboardType={'email-address'}
-                    placeholderTextColor="#c4c4c2"
+                    placeholderTextColor="#fff"
                 />
 
                 <TextInput
@@ -89,7 +73,7 @@ export default function Login({ navigation }) {
                     placeholder='Password'
                     style={styles.textBoxes}
                     secureTextEntry
-                    placeholderTextColor="#c4c4c2" />
+                    placeholderTextColor="#fff" />
 
 
                 <TouchableOpacity
@@ -98,55 +82,56 @@ export default function Login({ navigation }) {
                     <Text style={styles.buttonTitle}>Log in</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={{ marginTop: 30, marginLeft: 10, }} onPress={forgotPassword}>
+                <TouchableOpacity style={{ marginTop: 20 }} onPress={forgotPassword}>
                     <Text style={{ fontSize: 18, fontWeight: "bold", color: "#fff" }}>Forgot Password</Text>
                 </TouchableOpacity>
-                <View style={{ flex: 1, marginTop: 20, marginLeft: 10, }}>
-                    <Text style={{ fontSize: 18, color: "#fff" }}>Don't have an account? <Text style={{ color: "#f7d081", fontSize: 20, fontWeight: "bold" }}
+                <View style={{ flex: 1, marginTop: 20 }}>
+                    <Text style={{ fontSize: 18, color: "#fff" }}>Don't have an account? <Text style={{ color: "#ffd700", fontSize: 20, fontWeight: "bold" }}
                         onPress={register}>Sign up</Text></Text>
                 </View>
 
-                </View>
-                </ImageBackground>
-        </View>
+            </View>
+        </KeyboardAwareScrollView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1, 
+        flex: 1,
+        backgroundColor: '#000',
 
+        paddingTop: 100
     },
     con: {
-        flex: 1.5,
-        margin: 10,
-       marginTop: -50,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     textBoxes: {
-        width: '65%',
+        width: '90%',
         fontSize: 18,
-        padding: 10,
-        borderColor: 'white',
+        padding: 12,
+        borderColor: 'grey',
         borderBottomWidth: 2,
-        color: '#fff',
         borderRadius: 10,
-        paddingTop: 30,
+        marginTop: 10,
+        color: "#fff",
         marginBottom: 10
     },
     acc: {
-        width: '100%', height: 200,
+
         height: 80,
         width: 80,
         alignSelf: "center",
-        //marginTop: 150,
+        margin: 30,
         borderRadius: 50
     },
     button: {
-        backgroundColor: '#f7d081',
-        width: 100,
-        marginLeft: 10,
-        marginTop: 30,
-        borderRadius: 5,
+        backgroundColor: '#ffd700',
+        marginLeft: 30,
+        marginRight: 30,
+        marginTop: 20,
+        padding: 15,
+        borderRadius: 15,
         alignItems: "center",
         padding: 10,
         justifyContent: 'center'
