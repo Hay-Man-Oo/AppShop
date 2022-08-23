@@ -5,6 +5,7 @@ import {
   DrawerItemList
 } from '@react-navigation/drawer';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { firebase } from '../config';
 
 const CustomDrawer = props => {
 

@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, Image,TouchableOpacity,Alert} from "react-nativ
 import React, { useContext, useEffect, useState } from "react";
 import { firebase } from "../config";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const ProductDetail = ({ route, navigation }) => {
   const dataRef = firebase.firestore().collection("products");
@@ -23,7 +24,7 @@ const ProductDetail = ({ route, navigation }) => {
                 imgURL: imgURL,
                 desc: desc,
                 price: price,
-                qty: qty
+                qty: count
             }]
             AsyncStorage.setItem("carts", JSON.stringify(cartItem))
         } else {
@@ -36,7 +37,7 @@ const ProductDetail = ({ route, navigation }) => {
                 imgURL: imgURL,
                 desc: desc,
                 price: price,
-                qty: qty
+                qty: count
             }]
             AsyncStorage.setItem("carts", JSON.stringify([...datas, ...cartItem])).then(() => {
                 Alert.alert("Your Product have successfully added to cart.")
@@ -46,21 +47,40 @@ const ProductDetail = ({ route, navigation }) => {
     })
 }
 
-  //var [id] = useState(route.params.res.id)
-  //var [name, setName] = useState(route.params.res.name);
-  //var [desc, setDesc] = useState(route.params.res.desc);
-  //var [price, setPrice] = useState(route.params.res.price);
-  //var [qty, setQty] = useState(route.params.res.qty);
-  //var [category, setCategory] = useState(route.params.res.category);
+const [count, setCount] = useState(1);
+
+const increase = (item) => {
+ setCount(count + 1)
+} 
+
+const decrease = (item) => {
+  if (count <= 0) {
+    count === 0;
+    navigation.navigate('ProductDetail', {item})
+  } else {
+    setCount(count - 1);
+  }
+}
+  
   return (
     <View style={styles.container}>
-      {/*<Text style={styles.expoView}>ProductDetail</Text>*/}
       <Image style={styles.iimage} source={{ uri: imgURL }} />
       <View>
         <Text style={styles.text}>ID : {id}</Text>
         <Text style={styles.text}>Name : {name}</Text>
         <Text style={styles.text}>Price : $ {price}</Text>
-        <Text style={styles.text}>Quantity : {qty}</Text>
+        <View style={{ flexDirection: 'row',}}>
+        <Text style={styles.text}>Qty : </Text>
+          <View style={{padding: 8}}>
+          <MaterialCommunityIcons name="minus" size={20} color={'gold'}
+            onPress={decrease} />
+          </View>
+          <Text style={styles.text}>{count}</Text>
+          <View style={{padding: 8}}>
+          <MaterialCommunityIcons name="plus" size={20} color={'gold'}
+            onPress={increase} />
+          </View>
+        </View>
         <Text style={styles.text}>Description : {desc}</Text>
         <View style={{marginTop: 40}}>
           <TouchableOpacity
