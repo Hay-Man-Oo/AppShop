@@ -10,11 +10,12 @@ const MyCart = ({ route, navigation }) => {
 
     //const [data, setData] = useState([]);
     const dataRef = firebase.firestore().collection('products')
-
+    const timestamp = firebase.firestore.FieldValue.serverTimestamp();
     const [total, setTotal] = useState('');
+      
+    //Getting user id
     const firestore = firebase.firestore;
     const auth = firebase.auth;
-    
     const [user, setUser] = useState(null)
     const [users, setUsers] = useState([])
 
@@ -26,33 +27,9 @@ const MyCart = ({ route, navigation }) => {
             })
     }, [])
     const uid = user?.id;
+    const urname = user?.username;
     console.log(uid);
-
-    const order = () => {
-        // if (uid !== null) {
-        const individualCart = {
-          "id": id ,
-          "name": name ,
-          "imgURL": imgURL ,
-          "desc": desc ,
-          "price": price ,
-          "qty": qty ,
-        };
-        // console.log(individualCart);
-        // Product = individualCart;
-        // Product['qty'] = 1;
-        // Product['TotalProductPrice'] = Product.qty * Product.price;
-        firebase
-          .firestore()
-          .collection("orders" + uid)
-          .doc(individualCart.id)
-          .set(individualCart)
-          .then(() => {
-            console.log("Successfully order");
-          });
-        // }
-      };
-    
+    console.log(urname);
 
       var [id] = useState('');
       var [name, setName] = useState('');
@@ -76,10 +53,13 @@ const MyCart = ({ route, navigation }) => {
                     })
                     console.log(sum);
                     setTotal(sum);
+
                 }
             })
         })
     }, [])
+
+    console.log(cartList);
 
     const itemDelete = async (i) => {
 
@@ -105,6 +85,34 @@ const MyCart = ({ route, navigation }) => {
         }
     }
 
+     // Add pending Order to firebase database
+     const order = () => {
+        // if (uid !== null) {
+         
+         const cartOrder = {
+             cartList,
+             "total": total,
+             "username": user?.username,
+             "phone": user?.phone,
+             "address": user?.address,  
+             'createdAt':timestamp,
+         };
+        // console.log(cartOrder);
+        firebase
+            .firestore()
+            .collection("orders")
+            .doc("client "+urname)
+            .collection("cart "+ uid )
+            .doc(cartOrder.id)
+            .set(cartOrder)
+            .then(() => {
+                console.log("Successfully order pending !!!");
+                Alert.alert("Your Orders are pending. Plz wait for confirmation...")
+                navigation.navigate('Products')
+          });
+        // }
+     };
+    
     const CartItemView = ({ item,index }) => {
         return (
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10 }}>
@@ -138,15 +146,18 @@ const MyCart = ({ route, navigation }) => {
                         style={{ flex: 1, marginTop: 16 }}
             />
 
-            {/*<View style={{flex: 0.5}}>
+            
+
+            <View style={{ flex: 0.5 }}>
+            <View >
                 
-                <Text>UserID : { user?.id}</Text>
+                    <Text>UserID : { user?.id}</Text>
                 <Text>Name : {user?.username}</Text>
                 <Text>Email : {user?.email}</Text>
                 <Text>Phone : {user?.phone}</Text>
+                <Text>Address : {user?.address}</Text> 
                 
-            </View>*/}
-            <View>
+            </View>
                 <Text style={{fontSize: 20,fontWeight:'bold',color: 'gold'}}>Check Out</Text>
             <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 10}}>
                 <Text>Shipping Fee</Text>
@@ -155,14 +166,12 @@ const MyCart = ({ route, navigation }) => {
             <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 10}}>
                 <Text>Total</Text>
                 <Text>$ {total}</Text>
-            </View>
-            </View>
-           
-            <View style={styles.btn}>
-                    <TouchableOpacity onPress={order}>
+                </View>
+                <TouchableOpacity onPress={order} style={styles.btn}>
                         <Text>Order</Text>
                     </TouchableOpacity>
             </View>
+
             </View>
      
     )
@@ -214,3 +223,12 @@ const styles = StyleSheet.create({
         borderRadius: 15,
       }
 })
+
+//const individualOrder = {
+//    "id": id ,
+//    "name": name ,
+//    "imgURL": imgURL ,
+//    "desc": desc ,
+//    "price": price ,
+//    "qty": qty ,
+//  };

@@ -1,4 +1,4 @@
-import  React from 'react';
+import  React,{useEffect} from 'react';
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -8,19 +8,31 @@ import OrderDetail from '../DrawerScreens/OrderDetail';
 import UserList from './userList';
 import { firebase } from '../config';
 import { CommonActions } from '@react-navigation/native';
-
+import {Restart} from '../components/reload/reload'
 export default function AdminTab({ navigation }) {
   const Tab = createBottomTabNavigator();
+ 
 
   const SignOut = () => {
     firebase.auth().signOut()
-    navigation.dispatch(
-        CommonActions.reset({
-            index: 0,
-            routes: [{ name: 'Login' }]
-        })
-    )
+  //  navigation.dispatch(
+      CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'Login' }]
+      })
+  
+    //navigation.navigate('Login')
+    Restart()
 }
+//const signOut = () => {
+//  firebase.auth().signOut()
+//  navigation.dispatch(
+//      CommonActions.reset({
+//          index: 0,
+//          routes: [{ name: 'Login' }]
+//      })
+//  )
+//}
   return (
     <Tab.Navigator
       initialRouteName="Admin"

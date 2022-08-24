@@ -10,19 +10,109 @@ export default function Register({ navigation }) {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState('');
     const [username, setName] = useState("");
+    const [emailError, setEmailError] = useState("")
     const [phone, setphone] = useState("");
     const [address, setaddress] = useState("");
+    const [usernameError, setusernameError] = useState("")
+    const [phoneError, setphoneError] = useState("")
+    const [addressError, setaddressError] = useState("")
+    const [passwordError, setPasswordError] = useState("")
+    const [confirmpasswordError, setconfirmPasswordError] = useState("")
+    const emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const onFooterLinkPress = () => {
         navigation.navigate('Login')
     }
     const onRegisterPress = () => {
         const timestamp = firebase.firestore.FieldValue.serverTimestamp();
-        if (password !== confirmPassword) {
-            alert("Passwords don't match.")
-            return
-        }
+        //if (password !== confirmPassword) {
+        //    alert("Passwords don't match.")
+        //    return
+        //}
 
-        firebase
+        
+            //.catch((error) => {
+            //    alert(error)
+            //});
+        //username validation
+            var nameValid = false;
+            if(username.length == 0){
+                setusernameError("Enter Full Name");
+            }        
+            else{
+                setusernameError("")
+                nameValid = true
+            }
+        //Email Validation
+            var emailValid = false;
+            if(email.length == 0){
+                setEmailError("Email is required");
+            }        
+            else if(email.length < 6){
+                setEmailError("Email should be minimum 6 characters");
+            }      
+            else if(email.indexOf(' ') >= 0){        
+                setEmailError('Email cannot contain spaces');                          
+            }   
+            else if (!emailPattern.test(email) && email.length > 0) {
+                setEmailError("Enter a valid email!")
+    
+            }    
+            else{
+                setEmailError("")
+                emailValid = true
+            }
+        //phone validation
+        var phoneValid = false;
+        if(phone.length == 0){
+            setphoneError("Enter a phone number.");
+        }        
+          
+        else{
+            setphoneError("")
+            phoneValid = true
+        
+        }
+        //address validation
+        var addressValid = false;
+        if(address.length == 0){
+            setaddressError("Enter an Address. ");
+        }        
+          
+        else{
+            setaddressError("")
+            addressValid = true
+        
+        }
+        //password validation
+        
+        var passwordValid = false;
+        if(password.length == 0){
+            setPasswordError("Password is required");
+        }        
+        else if(password.length < 6){
+            setPasswordError("Password should be minimum 6 characters");
+        }      
+        else if(password.indexOf(' ') >= 0){        
+            setPasswordError('Password cannot contain spaces');                          
+        }    
+        else{
+            setPasswordError("")
+            passwordValid = true
+        }     
+        //confirmpassword validation
+        var confirmpasswordValid = false;
+        if (confirmPassword.length == 0) {
+            setconfirmPasswordError("Enter Password Confirmation.");
+        }
+       
+        
+        else if (confirmPassword !== password) {
+           
+        setconfirmPasswordError("Password and Confrim password should be the same!")
+        }
+       
+        else {
+            firebase
             .auth()
             .createUserWithEmailAndPassword(email, password)
             .then((response) => {
@@ -49,9 +139,9 @@ export default function Register({ navigation }) {
                     });
 
             })
-            .catch((error) => {
-                alert(error)
-            });
+            setconfirmPasswordError ("")
+            confirmpasswordValid = true
+            }     
 
     }
 
@@ -72,7 +162,9 @@ export default function Register({ navigation }) {
                     style={styles.textBoxes} >
 
                 </TextInput>
-
+                {usernameError.length > 0 &&
+                  <Text style={{color:"red"}}>{usernameError}</Text>
+                }
 
                 <TextInput
                     value={email}
@@ -85,7 +177,9 @@ export default function Register({ navigation }) {
                 >
 
                 </TextInput>
-
+                {emailError.length > 0 &&
+                        <Text style={{ color: "red" }}>{emailError}</Text>
+                    }
                 <TextInput
                     value={phone}
                     placeholderTextColor="#fff"
@@ -96,7 +190,10 @@ export default function Register({ navigation }) {
                 >
 
                 </TextInput>
-
+                {phoneError.length > 0 &&
+            
+            <Text style={{color:"red"}}>{phoneError}</Text>
+          }
                 <TextInput
                     value={address}
                     placeholderTextColor="#fff"
@@ -106,7 +203,10 @@ export default function Register({ navigation }) {
                 >
 
                 </TextInput>
-
+                {addressError.length > 0 &&
+            
+            <Text style={{color:"red"}}>{addressError}</Text>
+          }
                 <TextInput
                     value={password}
                     placeholderTextColor="#fff"
@@ -116,7 +216,10 @@ export default function Register({ navigation }) {
                     style={styles.textBoxes} >
 
                 </TextInput>
-
+                {passwordError.length > 0 &&
+            
+            <Text style={{color:"red"}}>{passwordError}</Text>
+          }
 
                 <TextInput
                     placeholderTextColor="#fff"
@@ -126,7 +229,10 @@ export default function Register({ navigation }) {
                     value={confirmPassword}
                     style={styles.textBoxes}
                 />
-
+ {confirmpasswordError.length > 0 &&
+            
+            <Text style={{color:"red"}}>{confirmpasswordError}</Text>
+          }
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => onRegisterPress()}>

@@ -1,24 +1,34 @@
-import React from "react";
+import React, { useContext, useEffect} from "react";
 import { View, Image, Text,TouchableOpacity } from 'react-native';
 import {
   DrawerContentScrollView,
   DrawerItemList
 } from '@react-navigation/drawer';
+import { CommonActions } from '@react-navigation/native'
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { firebase } from '../config';
+import { Restart } from '../components/reload/reload'
+const CustomDrawer = (props) => {
+ 
+ 
+const SignOut = () => {
+  firebase.auth().signOut()
+    CommonActions.reset({
+      index: 0,
+      routes: [{ name: 'Login' }]
+    })
+    Restart()
+}
 
-const CustomDrawer = props => {
-
-  const SignOut = ({navigation}) => {
-    firebase.auth().signOut()
-   
-        navigation.reset({
-            index: 0,
-            routes: [{ name: 'Login' }]
-        })
-   
-  }
-  
+//const signOut = ({navigation}) => {
+//  firebase.auth().signOut()
+//  navigation.dispatch(
+//      CommonActions.reset({
+//          index: 0,
+//          routes: [{ name: 'Login' }]
+//      })
+//  )
+//}
   return (
     
     <View style={{ flex:1 }}>
@@ -40,17 +50,17 @@ const CustomDrawer = props => {
           style={{marginLeft: 20, fontSize: 16, marginTop: 8, paddingBottom: 10}}>
           wtth@brandmail.com
         </Text>
-        <View style={{flex:1, backgroundColor:"#fff", paddingTop: 10}}> 
+        <View style={{flex:1, backgroundColor:"#fff",paddingBottom:5,paddingTop:5}}> 
           <DrawerItemList {...props} />
         </View>
       </DrawerContentScrollView>
-      <View style={{ padding: 15, borderTopWidth: 2, borderTopColor: "#ccc" }}>
+      <View style={{ borderTopWidth:2,paddingBottom:120,paddingLeft:20, borderTopColor: "#ccc" }}>
         <TouchableOpacity
           onPress={SignOut}
           style={{ paddingVertical: 15 }}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <MaterialCommunityIcons name="logout" color={"#ffd700"} size={30} />
-            <Text style={{fontSize: 15, marginLeft: 15}}> Sign Out</Text>
+            <Text style={{fontSize: 14, marginLeft: 25}}> Sign Out</Text>
           </View>
         </TouchableOpacity>
       </View>
