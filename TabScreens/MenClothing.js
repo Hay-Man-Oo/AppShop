@@ -74,7 +74,7 @@ import * as Animatable from 'react-native-animatable';
               <TouchableOpacity
               onPress={() => navigation.navigate("ProductDetail", { item })}
               >
-                <View style={{ padding: 10, paddingTop: 0, }}>
+                <View style={{ padding: 10, paddingTop: 10, }}>
                 <View style={{ paddingTop: 20, flexDirection: "column",}}>
                   <View>
                     <Image
@@ -108,7 +108,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '100%',
-    backgroundColor: 'black'
   },
   iimage: {
     width: 150,
@@ -125,41 +124,11 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
     lineHeight: 18,
   },
-  Box: {
-    padding: 10,
-    marginBottom: 10,
-    borderWidth: 2,
-    borderColor: "#fff",
-    backgroundColor: "gray",
-    borderRadius: 15,
-  },
-  decText: {
-    fontSize: 14,
-    color: 'gold',
-    fontWeight: 'bold',
-  },
-  tinyLogo: {
-    width: 50,
-    height: 50,
-    borderRadius: 40,
-    borderWidth: 1,
-    borderColor: "#fff",
-  },
   expoView: {
     fontSize: 26,
-    color: '#fff',
+    color: 'gold',
     fontWeight: '500',
     letterSpacing: 1,
-    padding: 10
-  },
-  button: {
-      marginTop: 10,
-      alignItems: "center",
-      justifyContent: 'center',
-      backgroundColor: "#FFE89C",
-      padding: 10,
-      width: '100%',
-      borderRadius: 20
   },
   text: {
     fontSize: 14,

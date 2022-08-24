@@ -32,14 +32,14 @@ export default function Home(navigation) {
        
     }
     return (
-        <Drawer.Navigator initialRouteName="DrawerHome"
+        <Drawer.Navigator initialRouteName="Products"
             drawerContent={props => <CustomDrawer {...props} />}
             screenOptions={{
                 drawerActiveBackgroundColor: "black",
                 drawerActiveTintColor: '#fff',
                 drawerInactiveTintColor: '#333',
             }} >
-            <Drawer.Screen
+            {/*<Drawer.Screen
                 name="DrawerHome"
                 component={DrawerHome}
                 options={{
@@ -57,7 +57,7 @@ export default function Home(navigation) {
                         source={require('../assets/logo.png')}
                     />,
                 }}
-            />
+            />*/}
             <Drawer.Screen
                 name="Products"
                 component={Products}
@@ -74,7 +74,7 @@ export default function Home(navigation) {
                             name="cart"
                             style={{
                                 fontSize: 30,
-                                color: 'white',
+                                color: '#f7d081',
                             }}
                             onPress={() => navigation.navigate('MyCart')}
                         />

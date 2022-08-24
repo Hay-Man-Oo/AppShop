@@ -1,9 +1,8 @@
-import { StyleSheet, Text, View, TouchableOpacity, Alert ,Image} from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Alert ,Image,ScrollView} from 'react-native'
 import React, { useState,useEffect } from 'react';
 import { firebase } from '../config'
 import { FlatList, TextInput } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Ionicons } from "@expo/vector-icons";
 
 const MyCart = ({ route, navigation }) => {
@@ -40,6 +39,7 @@ const MyCart = ({ route, navigation }) => {
 
 
     const [cartList, setCartList] = useState([]);
+    const [note, setNote] = useState('');
 
     useEffect(() => {
         navigation.addListener("focus", () => {
@@ -95,14 +95,15 @@ const MyCart = ({ route, navigation }) => {
              "username": user?.username,
              "phone": user?.phone,
              "address": user?.address,  
+             "note" : note,
              'createdAt':timestamp,
          };
         // console.log(cartOrder);
         firebase
             .firestore()
             .collection("orders")
-            .doc("client "+urname)
-            .collection("cart "+ uid )
+            //.doc("client "+urname)
+            //.collection("cart "+ uid )
             .doc(cartOrder.id)
             .set(cartOrder)
             .then(() => {
@@ -146,33 +147,57 @@ const MyCart = ({ route, navigation }) => {
                         style={{ flex: 1, marginTop: 16 }}
             />
 
-            
-
             <View style={{ flex: 0.5 }}>
-            <View >
-                
-                    <Text>UserID : { user?.id}</Text>
-                <Text>Name : {user?.username}</Text>
-                <Text>Email : {user?.email}</Text>
-                <Text>Phone : {user?.phone}</Text>
-                <Text>Address : {user?.address}</Text> 
-                
-            </View>
-                <Text style={{fontSize: 20,fontWeight:'bold',color: 'gold'}}>Check Out</Text>
-            <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 10}}>
-                <Text>Shipping Fee</Text>
-                <Text>$ 10</Text>
-            </View>
-            <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 10}}>
-                <Text>Total</Text>
-                <Text>$ {total}</Text>
+            <ScrollView>
+                <View>
+                    <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'gold' }}>Information</Text>
+                    {/*<View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 5}}>
+                        <Text>ID</Text>
+                        <Text>{user?.id}</Text>
+                    </View>*/}
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 5}}>
+                        <Text>Name</Text>
+                        <Text>{user?.username}</Text>
+                    </View>
+                    {/*<View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 5}}>
+                        <Text>Email</Text>
+                        <Text>{user?.email}</Text>
+                    </View>*/}
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 5}}>
+                        <Text>Phone</Text>
+                        <Text>{user?.phone}</Text>
+                    </View>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 5}}>
+                        <Text>Address</Text>
+                        <Text>{user?.address}</Text>
+                    </View>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 5}}>
+                        <Text>Note</Text>
+                        <TextInput
+                            style={styles.textBoxes}
+                            placeholder='Message'
+                            onChangeText={(note) => setNote(note)}
+                            placeholderTextColor="#c4c4c2"
+                        />
+                    </View>
                 </View>
-                <TouchableOpacity onPress={order} style={styles.btn}>
+                    <Text style={{fontSize: 20,fontWeight:'bold',color: 'gold'}}>Check Out</Text>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 10}}>
+                        <Text>Shipping Fee</Text>
+                        <Text>$ 10</Text>
+                    </View>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 10}}>
+                        <Text>Total</Text>
+                        <Text>$ {total}</Text>
+                    </View>
+                    <TouchableOpacity onPress={order} style={styles.btn}>
                         <Text>Order</Text>
                     </TouchableOpacity>
+                </ScrollView>
             </View>
+            
 
-            </View>
+        </View>
      
     )
 }
@@ -182,7 +207,7 @@ export default MyCart
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 10,
+        padding: 5,
     },
     text: {
         paddingTop: 30,
@@ -193,26 +218,16 @@ const styles = StyleSheet.create({
     icon: {
         paddingTop: 20,
       },
-    input: {
-        height: 40,
-        margin: 12,
-        borderWidth: 1,
-        padding: 10,
-        borderRadius: 20
+    textBoxes: {
+        fontSize: 18,
+        //padding: 5,
+        color: 'gold',
+        width: '50%'
     },
-    inputAddress: {
-        height: 80,
-        margin: 12,
-        borderWidth: 1,
-        padding: 10,
-        borderRadius: 20
-    },
-
     btn: {
-      marginBottom: 10,
       alignItems: "center",
       justifyContent: 'center',
-      backgroundColor: "#FFE89C",
+      backgroundColor: "#f7d081",
       padding: 10,
       width: '100%',
       borderRadius: 20
@@ -223,12 +238,3 @@ const styles = StyleSheet.create({
         borderRadius: 15,
       }
 })
-
-//const individualOrder = {
-//    "id": id ,
-//    "name": name ,
-//    "imgURL": imgURL ,
-//    "desc": desc ,
-//    "price": price ,
-//    "qty": qty ,
-//  };

@@ -1,23 +1,24 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Button, Image ,ImageBackground} from 'react-native';
+import { ActivityIndicator,StyleSheet, Text, View, TextInput, TouchableOpacity, Button, Image ,ImageBackground} from 'react-native';
 import { firebase } from '../config'
-import React, { useState } from 'react';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import React, { useState,useEffect } from 'react';
+
+
 export default function Login({ navigation }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [emailError, setEmailError] = useState("");
     const [passwordError, setPasswordError] = useState("");
     const emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    
+
     function register() {
         navigation.navigate('Register')
     }
     function forgotPassword() {
         navigation.navigate("ForgotPassword")
     }
-
+ 
     const onLoginPress = () => {
-        
+
         var emailValid = false;
             if(email.length == 0){
                 setEmailError("Email is required");
@@ -33,7 +34,16 @@ export default function Login({ navigation }) {
     
             }   
             else {
-                firebase
+                setEmailError("")
+                emailValid = true
+        }
+        
+            var passwordValid = false;
+        if (password.length == 0) {
+            setPasswordError("Password is Required!");
+        }
+         else {
+            firebase
                 .auth()
                 .signInWithEmailAndPassword(email, password)
                 .then((response) => {
@@ -44,40 +54,45 @@ export default function Login({ navigation }) {
                         .get()
                         .then(firestoreDocument => {
                             //console.log("firebase Data:",firestoreDocument.data())
-        
+    
                             if (!firestoreDocument.exists) {
                                 alert("User does not exist anymore.")
+                                //setPasswordError("User does not exist anymore");
                                 return;
-                            } else {
+                            }
+                                
+                            else {
+                             
                                 const userrole = firestoreDocument.data()?.role
                                 //console.log(userrole)
                                 if (userrole == "Admin") {
                                     navigation.navigate("AdminHome")
                                 } else
                                     navigation.navigate("Home")
-        
-        
                             }
                         })
+                      
                         .catch(error => {
                             alert(error)
-                        });
+                        //    setPasswordError(error);
+                        //   console.log(error)
+                        })
                 })
                 .catch(error => {
                     alert(error)
+                    //setPasswordError(error);
+                    //console.log(error)
                 })
-    
-                setEmailError("")
-                emailValid = true
-            }
-            
+        
+                setPasswordError("")
+                passwordValid = true
+            }   
        
-            //.catch(error => {
-            //    alert(error)
-            //});     
     }
     return (
-        <View style={styles.container}>
+
+   <View style={styles.container}>
+
         <ImageBackground
             source={require('../assets/bg.jpg')}
             style={{width: '100%', height: "100%",}}
@@ -120,7 +135,10 @@ export default function Login({ navigation }) {
                 secureTextEntry
                 placeholderTextColor="#c4c4c2" />
 
-
+    {passwordError.length > 0 &&
+            
+            <Text style={{color:"red"}}>{passwordError}</Text>
+          }
             <TouchableOpacity
                 style={styles.button}
                 onPress={() => onLoginPress()}>
@@ -137,6 +155,7 @@ export default function Login({ navigation }) {
 
             </View>
             </ImageBackground>
+            
     </View>
 );
 }

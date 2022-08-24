@@ -13,7 +13,10 @@ export default function DrawerHome( { navigation } ) {
       <View style={{flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: "space-between",}}>
-      <Text style={styles.label1}>New Arrivals</Text>
+        <Text style={styles.label1}>New Arrivals</Text>
+        <TouchableOpacity>
+          <Text style={styles.label1}>See More</Text>
+        </TouchableOpacity>
       {/*<Image source={require("../assets/logo.png")} style={styles.imgLogo} />*/}
       </View>
       <ScrollView style={{ flex: 0.5, margin: 3 }}>

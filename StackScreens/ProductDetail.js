@@ -54,7 +54,7 @@ const increase = (item) => {
 } 
 
 const decrease = (item) => {
-  if (count <= 0) {
+  if (count <= 1) {
     count === 0;
     navigation.navigate('ProductDetail', {item})
   } else {
@@ -71,18 +71,18 @@ const decrease = (item) => {
         <Text style={styles.text}>Price : $ {price}</Text>
         <View style={{ flexDirection: 'row',}}>
         <Text style={styles.text}>Qty : </Text>
-          <View style={{padding: 8}}>
+          <View style={{padding: 5,borderWidth: 1,borderColor:'gold'}}>
           <MaterialCommunityIcons name="minus" size={20} color={'gold'}
             onPress={decrease} />
           </View>
-          <Text style={styles.text}>{count}</Text>
-          <View style={{padding: 8}}>
+          <Text style={styles.textcount}>{count}</Text>
+          <View style={{padding: 5,borderWidth: 1,borderColor:'gold'}}>
           <MaterialCommunityIcons name="plus" size={20} color={'gold'}
             onPress={increase} />
           </View>
         </View>
         <Text style={styles.text}>Description : {desc}</Text>
-        <View style={{marginTop: 40}}>
+        <View style={{marginTop: 80}}>
           <TouchableOpacity
             style={styles.button}
             onPress={addToCart}
@@ -107,10 +107,10 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   iimage: {
-    width: 350,
-    height: 350,
+    width: '100%',
+    height: '50%',
     borderRadius: 20,
-    margin: 5
+    marginTop: 10
   },
   expoView: {
     fontSize: 24,
@@ -120,13 +120,22 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   button: {
-    //marginTop: 10,
     alignItems: "center",
     justifyContent: 'center',
-    backgroundColor: "#FFE89C",
+    backgroundColor: "#f7d081",
     padding: 15,
     width: '100%',
     borderRadius: 30
+  },
+  textcount: {
+  //marginTop: 10,
+  fontSize: 16,
+  color: "#fff",
+  fontWeight: "400",
+  letterSpacing: 1,
+  padding: 10,
+  borderWidth: 1,
+  borderColor: 'gold'
 },
   text: {
     //marginTop: 10,

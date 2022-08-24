@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "500",
     letterSpacing: 1,
-    padding: 30,
+    padding: 20,
     textAlign: 'center',
   },
   text: {
