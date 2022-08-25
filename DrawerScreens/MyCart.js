@@ -91,12 +91,15 @@ const MyCart = ({ route, navigation }) => {
          
          const cartOrder = {
              cartList,
+             "status" : "pending",
              "total": total,
+             "userid" : user?.id,
              "username": user?.username,
              "phone": user?.phone,
              "address": user?.address,  
              "note" : note,
-             'createdAt':timestamp,
+             'createdAt': timestamp,
+            // "orderId" : 
          };
         // console.log(cartOrder);
         firebase
@@ -151,10 +154,10 @@ const MyCart = ({ route, navigation }) => {
             <ScrollView>
                 <View>
                     <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'gold' }}>Information</Text>
-                    {/*<View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 5}}>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 5}}>
                         <Text>ID</Text>
                         <Text>{user?.id}</Text>
-                    </View>*/}
+                    </View>
                     <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 5}}>
                         <Text>Name</Text>
                         <Text>{user?.username}</Text>

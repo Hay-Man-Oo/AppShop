@@ -21,7 +21,6 @@ const UpdateProduct = ({ route, navigation }) => {
   const [productName, setProductName] = useState(route.params.item.name);
   const [desc, setDesc] = useState(route.params.item.desc);
   const [price, setPrice] = useState(route.params.item.price);
-  const [size, setSize] = useState(route.params.item.size);
   const [qty, setQty] = useState(route.params.item.qty);
   const [category_id, setCategory_id] = useState(route.params.item.category_id);
   const [category_name, setCategory_name] = useState(route.params.item.category_name);

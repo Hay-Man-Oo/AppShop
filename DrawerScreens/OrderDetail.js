@@ -28,11 +28,10 @@ export default function OrderDetail({ navigation }) {
     console.log(urname);
   
   
-
+  const timestamp = firebase.firestore.FieldValue.serverTimestamp();
   const [data, setData] = useState([]);
   const [cartList, setCartList] = useState([]);
   const dataRef = firebase.firestore().collection('orders')
-    //.doc("client " + urname).collection("cart " + uid);
 
   // read data
   const read = () => {
@@ -45,11 +44,15 @@ export default function OrderDetail({ navigation }) {
         querySnapshot.forEach((doc) => {
         console.log("Data = ", doc.data());
           data.push(doc.data());
+        const { userid } = doc.data();
         const { address } = doc.data();
         const { cartList } = doc.data();
-        const { phone } = doc.data();
+          const { phone } = doc.data();
+          const { status } = doc.data();
         const { total } = doc.data();
         const { username } = doc.data();
+        const { createdAt } = doc.data();
+        const { note } = doc.data();
           setCartList(doc.data().cartList);
        console.log("arr obj=" +cartList);
         //data.push({
@@ -70,19 +73,19 @@ export default function OrderDetail({ navigation }) {
   }, []);
   
   
-// delete data
-const destroy = (data) => {
-  dataRef
-    .doc(data.id)
-    .delete()
-    .then(() => {
-      alert("Deleted Successfully!");
-      console.log(" Data Deleted");
-    })
-    .catch((error) => {
-      alert("error");
-    });
-};
+//// delete data
+//const destroy = (data) => {
+//  dataRef
+//    .doc(data.id)
+//    .delete()
+//    .then(() => {
+//      alert("Deleted Successfully!");
+//      console.log(" Data Deleted");
+//    })
+//    .catch((error) => {
+//      alert("error");
+//    });
+//};
   
 
 
@@ -97,6 +100,46 @@ return (
       renderItem={({ item }) => (
         <View>
           
+          <View style={{ flex: 0.5,borderBottomWidth: 1,borderColor:'#000',marginTop: 10 }}>
+            <ScrollView>
+                <View>
+                <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'gold',textAlign:'center'  }}>{item.status}</Text>
+                  <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 5}}>
+                        <Text>ID</Text>
+                        <Text>{user?.id}</Text>
+                    </View>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 5}}>
+                        <Text>Name</Text>
+                        <Text>{item.username}</Text>
+                    </View>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 5}}>
+                        <Text>Phone</Text>
+                        <Text>{item.phone}</Text>
+                    </View>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 5}}>
+                        <Text>Address</Text>
+                        <Text>{item.address}</Text>
+                    </View>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 5}}>
+                        <Text>Note</Text>
+                        <Text>{item.note}</Text>
+                    </View>
+                </View>
+                    {/*<Text style={{fontSize: 20,fontWeight:'bold',color: 'gold'}}>Check Out</Text>*/}
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 5}}>
+                        <Text>Shipping Tax</Text>
+                        <Text>$ 10</Text>
+                    </View>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 5}}>
+                        <Text>Total</Text>
+                        <Text>$ {item.total}</Text>
+                    </View>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 5}}>
+                      <Text>Order Date</Text>
+                      <Text> {new Date(item.createdAt.seconds * 1000).toLocaleDateString("en-US")}</Text>
+                  </View>
+            </ScrollView>
+            
           {
             item.cartList.map((cartItem) => {
               console.log("cart Item",cartItem)
@@ -111,29 +154,6 @@ return (
             )
           }
 
-          
-          <View style={{ flex: 0.5,borderWidth: 1,borderColor:'#000',marginTop: 10 }}>
-            <ScrollView>
-                <View>
-                    <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 5}}>
-                        <Text>Name</Text>
-                        <Text>{item.username}</Text>
-                    </View>
-                    <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 5}}>
-                        <Text>Phone</Text>
-                        <Text>{item.phone}</Text>
-                    </View>
-                    <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 5}}>
-                        <Text>Address</Text>
-                        <Text>{item.address}</Text>
-                    </View>
-                </View>
-                    
-                    <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 5}}>
-                        <Text>Total</Text>
-                        <Text>$ {item.total}</Text>
-                    </View>
-                </ScrollView>
             </View>
        
           {/*<Text>Address: {item.address}</Text>

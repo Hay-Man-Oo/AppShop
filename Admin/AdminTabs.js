@@ -37,7 +37,7 @@ export default function AdminTab({ navigation }) {
     <Tab.Navigator
       initialRouteName="Admin"
       screenOptions={{
-        headerShown: false,
+        headerShown: true,
         //tabBarIconStyle: { display: 'none' },
         //tabBarStyle: {
         //  paddingBottom: 20

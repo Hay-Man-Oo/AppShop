@@ -15,7 +15,7 @@ const ProductDetail = ({ route, navigation }) => {
   var [qty, setQty] = useState(route.params.item.qty);
 
 
-  const addToCart = () => { 
+  const addToCart = () => {
     AsyncStorage.getItem("carts").then((data) => {
         if (data == null) {
             let cartItem = [{
@@ -27,20 +27,38 @@ const ProductDetail = ({ route, navigation }) => {
                 qty: count
             }]
             AsyncStorage.setItem("carts", JSON.stringify(cartItem))
+            Alert.alert("Your Product have successfully added to cart.")
+            navigation.navigate('MyCart')
         } else {
-            let datas = JSON.parse(data);                    
-            let cartItem = [{
-              id:
-                //datas[datas.length - 1].
-                  id + 1,
+            let datas = JSON.parse(data);
+            console.log(id, name)
+
+            let cartItem;
+
+            cartItem = {
+                id: id,
                 name: name,
                 imgURL: imgURL,
                 desc: desc,
                 price: price,
                 qty: count
-            }]
-            AsyncStorage.setItem("carts", JSON.stringify([...datas, ...cartItem])).then(() => {
-                Alert.alert("Your Product have successfully added to cart.")
+            };
+            
+            
+            const updatedArr = datas.findIndex((p) => p.id === id);
+
+            console.log(updatedArr, "updatedArr")
+
+            if (updatedArr != -1) {
+                datas[updatedArr].qty += count;
+            }
+            else {
+                datas.push(cartItem)
+                console.log(cartItem , ' = cartItem')
+            }
+            console.log("data = ", datas)
+            AsyncStorage.setItem("carts", JSON.stringify(datas)).then(() => {
+                Alert.alert("updated add to cartItem")
                 navigation.navigate('MyCart')
             })
         }
